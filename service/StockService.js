@@ -2,8 +2,12 @@ import { Stock } from "../models/models.js";
 import ApiError from '../error/ApiError.js';
 
 class StockService {
-    async create() {
-        
+    async create(newStock) {
+        const stock = await Stock.create({ ...newStock });
+        if (!stock) {
+            throw ApiError.badRequest('Не удалось создать акциию');
+        };
+
         const stocks = this.getAll();
         return stocks;
     };
@@ -11,7 +15,7 @@ class StockService {
     async update(reqBody, id) {
         const stock = await Stock.findOne({ where: { id } });
         if (!stock) {
-            throw ApiError.badRequest('Такая заявка отсусвует');
+            throw ApiError.badRequest('Такая акциия отсусвует');
         }; 
 
         await Stock.update({ ...reqBody }, { where: { id } });
@@ -20,8 +24,12 @@ class StockService {
         return stocks;
     };
 
-    async getAll() {
-        const stocks = await Stock.findAll();
+    async getAll({ limit, page }) {
+        page = +page || 1;
+        limit = +limit || 9;
+        let offset = page * limit - limit;
+
+        const stocks = await Stock.findAndCountAll({ limit, offset });
         return stocks;
     };
 

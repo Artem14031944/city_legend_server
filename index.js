@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import errorHandler from './middleware/ErrorHandingMiddleware.js'
-import { Stock } from './models/models.js'
-import router from './routes/index.js'
+import errorHandler from './middleware/ErrorHandingMiddleware.js';
+import { Stock } from './models/models.js';
+import router from './routes/index.js';
 import sequelise from './db/db.js';
 import express from 'express';
 import cors from 'cors';

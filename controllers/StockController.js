@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import StockService from "../service/StockService.js";
+import ApiError from '../error/ApiError.js';
 
 class StockController {
     async creat(req, res, next) {
@@ -9,10 +10,27 @@ class StockController {
                 return next(ApiError.badRequest(errors.array().map(err => err.msg).join('\n')));
             };
 
-            const {} = req.body;
-            const stocks = await StockService.create();
+            const { 
+                name, 
+                number_present, 
+                number_days_take_present, 
+                number_days_receive_present,
+                description,
+                numbers_cards,
+                present_id,
+            } = req.body;
+            
+            const stocks = await StockService.create({
+                name, 
+                number_present, 
+                number_days_take_present, 
+                number_days_receive_present,
+                description,
+                numbers_cards,
+                present_id, 
+            });
 
-            return res.json({ presents });
+            return res.json({ stocks });
         } catch(err) {
             next(err);
         }
@@ -31,8 +49,9 @@ class StockController {
 
     async getAll(req, res, next) {
         try {
+            let { limit, page } = req.query;
             const presents = [{ id: 1, name: '1' }];
-            const stocks = await StockService.getAll();
+            const stocks = await StockService.getAll({ limit, page });
 
             return res.json({ presents, stocks });
         } catch(err) {
@@ -45,7 +64,7 @@ class StockController {
             const { id } = req.params;
             const stocks = await StockService.delete(id);
 
-            return res.json(stocks);
+            return res.json({ message: 'Акция удалена', stocks});
         } catch(err) {
             next(err);
         }
