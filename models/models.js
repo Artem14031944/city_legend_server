@@ -8,7 +8,7 @@ const Stock = sequelize.define('stock', {
     number_days_take_present: { type: DataTypes.INTEGER },
     number_days_receive_present: { type: DataTypes.INTEGER },
     description: { type: DataTypes.STRING(500) },
-    numbers_cardss: { type: DataTypes.STRING(5000) },
+    numbers_cards: { type: DataTypes.STRING(5000) },
     present_id: { type: DataTypes.INTEGER }
 });
 

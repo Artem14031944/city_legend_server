@@ -1,17 +1,35 @@
+import { Stock } from "../models/models.js";
+import ApiError from '../error/ApiError.js';
+
 class StockService {
-    create() {
-
+    async create() {
+        
+        const stocks = this.getAll();
+        return stocks;
     };
 
-    update() {
+    async update(reqBody, id) {
+        const stock = await Stock.findOne({ where: { id } });
+        if (!stock) {
+            throw ApiError.badRequest('Такая заявка отсусвует');
+        }; 
 
+        await Stock.update({ ...reqBody }, { where: { id } });
+
+        const stocks = this.getAll();
+        return stocks;
     };
 
-    getAll() {
-
+    async getAll() {
+        const stocks = await Stock.findAll();
+        return stocks;
     };
 
-    delete() {
+    async delete(id) {
+        await Stock.destroy({ where: { id } });
+
+        const stocks = await this.getAll();
+        return stocks;
     };
 };
 
